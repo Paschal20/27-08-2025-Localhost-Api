@@ -6,8 +6,10 @@ interface Props {
   email: string;
   password: string;
   username: string;
-  _id: number;
+  _id?: number;
   phonenumber: number;
+  bios: string;
+  firstname: string;
 }
 
 const Card: React.FC<Props> = ({
@@ -15,35 +17,24 @@ const Card: React.FC<Props> = ({
   lastname,
   email,
   password,
+  firstname,
   username,
   _id,
+  bios,
 }) => {
   return (
-    <section className="flex flex-col justify-center items-center">
-      <div
-        key={_id}
-        className="flex flex-col w-[300px] rounded-md mt-6 shadow-2xl"
-      >
+    <div key={_id} className="shadow-sm p-5 rounded-md">
+      <div className="text-center rounded-md py-2 w-1/2 bg-blue-600">{username}</div>
+      <div className="flex gap-2">
+        <div>{firstname}</div>
         <div>{middlename}</div>
-
-        <div className="p-3 w-full">
-          <h1 className="border border-gray-400 w-30 p-1 rounded-sm">
-            {lastname}
-          </h1>
-          <p className="rounded-sm p-3 mb-3 mt-3 border border-gray-200 h-auto">
-            {email}
-          </p>
-          <div className="flex justify-between">
-            <p className="border border-gray-400 w-30 p-1 rounded-sm">
-              {password}
-            </p>
-            <p className="border border-gray-400 w-30 p-1 text-green-900 text-2xl rounded-sm">
-              {username}
-            </p>
-          </div>
-        </div>
+        <div>{lastname}</div>
       </div>
-    </section>
+
+      <div>{bios}</div>
+      <div>{email}</div>
+      <div>{password}</div>
+    </div>
   );
 };
 

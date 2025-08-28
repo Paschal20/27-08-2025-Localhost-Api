@@ -6,10 +6,12 @@ interface Users {
   _id: number;
   middlename: string;
   lastname: string;
+  firstname: string;
   phonenumber: number;
   email: string;
   password: string;
   username: string;
+  bios: string;
 }
 interface Data {
   getUsers: Users[];
@@ -17,6 +19,23 @@ interface Data {
 
 const Api = () => {
   const [data, setData] = useState<Data | null>(null);
+  const [searchItem, setSearchItem] = useState("");
+  const [modal, setModal] = useState(false);
+  const [selected, setSelected] = useState<Users>();
+
+  const handleSelected = (id: number) => {
+    const cardFound = filteredData.find((e) => e._id === id);
+
+    if (!cardFound) {
+      throw new Error("No selected Card");
+    } else {
+      setSelected(cardFound);
+      const handleModal = () => {
+        setModal(modal === false ? true : false);
+      };
+      handleModal();
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,22 +52,45 @@ const Api = () => {
     fetchProduct();
   }, []);
 
+  if (data === null) {
+    return;
+  }
+  const responseData = data.getUsers;
+  const filteredData = responseData.filter((user) =>
+    (user.username + user.firstname)
+      .toLowerCase()
+      .includes(searchItem.toLowerCase())
+  );
+
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {data &&
-        data.getUsers.map((e) => (
-          <Card
-            key={e._id}
-            _id={e._id}
-            middlename={e.middlename}
-            username={e.username}
-            email={e.email}
-            phonenumber={e.phonenumber}
-            lastname={e.lastname}
-            password={e.password}
-          />
-        ))}
-    </div>
+    <section>
+      <input
+        type="text"
+        value={searchItem}
+        onChange={(e) => setSearchItem(e.target.value)}
+      />
+      <div className="grid grid-cols-3 gap-4">
+        {data !== null &&
+          filteredData.map((e) => (
+            <div onClick={() => handleSelected(e._id)}>
+              <Card
+                key={e._id}
+                middlename={e.middlename}
+                username={e.username}
+                email={e.email}
+                phonenumber={e.phonenumber}
+                lastname={e.lastname}
+                password={e.password}
+                bios={e.bios}
+                firstname={e.firstname}
+              />
+            </div>
+          ))}
+      </div>
+      {modal && selected && (
+        <div className="bg-blue-600 absolute top-10">{selected.bios}</div>
+      )}
+    </section>
   );
 };
 
