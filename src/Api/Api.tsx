@@ -63,8 +63,10 @@ const Api = () => {
   );
 
   return (
-    <section>
+    <section className="flex flex-col items-center">
       <input
+        className="h-10 border m-10 p-5 rounded-sm border-gray-200 text-gray-600"
+        placeholder="Search...."
         type="text"
         value={searchItem}
         onChange={(e) => setSearchItem(e.target.value)}
@@ -88,7 +90,17 @@ const Api = () => {
           ))}
       </div>
       {modal && selected && (
-        <div className="bg-blue-600 absolute top-10">{selected.bios}</div>
+        <div
+          onClick={() => setModal(false)}
+          className="bg-gray-300/80 inset-0 fixed flex items-center justify-center bg-opacity-{2}"
+        >
+          <div
+            onClick={() => setModal(false)}
+            className="bg-blue-600 p-5 break-normal w-2xl rounded-md"
+          >
+            {selected.bios}
+          </div>
+        </div>
       )}
     </section>
   );
